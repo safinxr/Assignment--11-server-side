@@ -64,6 +64,12 @@ async function run() {
       const result = await stockCollection.deleteOne(query);
       res.send(result);
     });
+
+    app.post("/product", async (req, res) => {
+      const newData = req.body;
+      const result = await stockCollection.insertOne(newData);
+      res.send(result);
+    });
   } finally {
   }
 }
