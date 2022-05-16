@@ -33,13 +33,30 @@ async function run() {
       res.send(stock);
     });
 
-  app.get("/product/:id", async(req, res)=>{
-    const id = req.params.id;
-    const query = {_id:ObjectId(id)};
-    const product = await stockCollection.findOne(query);
-    res.send(product)
-  })
-    
+    app.get("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const product = await stockCollection.findOne(query);
+      res.send(product);
+    });
+
+    app.put("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const newData = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: {
+          quantity: newData.newquantity,
+        },
+      };
+      const result = await stockCollection.updateOne(
+        filter,
+        updatedDoc,
+        options
+      );
+      res.send(result);
+    });
   } finally {
   }
 }
