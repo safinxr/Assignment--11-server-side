@@ -22,19 +22,24 @@ async function run() {
 
     app.get("/product", async (req, res) => {
       const count = parseInt(req.query.count);
-
       const query = {};
       const cursor = stockCollection.find(query);
-
       let stock;
       if (count) {
-          stock=await cursor.limit(count).toArray()
-      } 
-      else {
+        stock = await cursor.limit(count).toArray();
+      } else {
         stock = await cursor.toArray();
       }
       res.send(stock);
     });
+
+  app.get("/product/:id", async(req, res)=>{
+    const id = req.params.id;
+    const query = {_id:ObjectId(id)};
+    const product = await stockCollection.findOne(query);
+    res.send(product)
+  })
+    
   } finally {
   }
 }
