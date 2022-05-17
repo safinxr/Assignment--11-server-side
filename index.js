@@ -22,15 +22,26 @@ async function run() {
 
     app.get("/product", async (req, res) => {
       const count = parseInt(req.query.count);
-      const query = {};
-      const cursor = stockCollection.find(query);
-      let stock;
-      if (count) {
-        stock = await cursor.limit(count).toArray();
+      const myEmail = req.query.email;
+      let query = {};
+      if (myEmail) {
+        query = { email: myEmail };
+        const cursor = stockCollection.find(query);
+        const stock = await cursor.toArray();
+        res.send(stock);  
       } else {
-        stock = await cursor.toArray();
+        query = {};
+        const cursor = stockCollection.find(query);
+        let stock;
+
+        if (count) {
+          stock = await cursor.limit(count).toArray();
+        } else {
+          stock = await cursor.toArray();
+        }
+        res.send(stock);
       }
-      res.send(stock);
+      
     });
 
     app.get("/product/:id", async (req, res) => {
